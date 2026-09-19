@@ -63,7 +63,7 @@ public class SessionTest extends student.TestCase {
         }
 
         assertNotNull(exception);
-        assertEquals("Duration cannot be more than 24 houurs (1440 minutes)",
+        assertEquals("Duration cannot be more than 24 hours (1440 minutes)",
             exception.getMessage());
     }
 

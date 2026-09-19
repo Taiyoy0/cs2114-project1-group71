@@ -45,7 +45,7 @@ public class Session {
         }
         if (durationMin > 1440) {
             throw new IllegalArgumentException(
-                "Duration cannot be more than 24 houurs (1440 minutes)");
+                "Duration cannot be more than 24 hours (1440 minutes)");
         }
 
         this.exercise = exercise;
