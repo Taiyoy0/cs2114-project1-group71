@@ -1,4 +1,4 @@
-package CalBurn;
+package calburn;
 
 import java.util.HashMap;
 

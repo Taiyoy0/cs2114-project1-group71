@@ -1,5 +1,4 @@
-package CalBurn;
-
+package calburn;
 // -------------------------------------------------------------------------
 /**
  * Record of one exercise's name and MET Value.
