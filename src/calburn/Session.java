@@ -5,14 +5,15 @@ import java.time.Instant;
 // -------------------------------------------------------------------------
 /**
  * A single logged session of an exercise
- * 
+ *
  * @author taiyol
- * @version Sep 16, 2026
+ * @version Sep 19, 2026
  */
 public class Session {
     // ~ Fields ................................................................
     private Exercise exercise;
     private int durationMin;
+    private double weightKg;
     private Instant time;
     private double caloriesBurned;
 
@@ -20,7 +21,7 @@ public class Session {
 
     /**
      * Constructs a Session object. Calculates caloriesBurned from given values.
-     * 
+     *
      * @param exercise
      *            The type of exercise
      * @param durationMin
@@ -29,7 +30,7 @@ public class Session {
      *            the weight of the individual during the activity
      * @param time
      *            the time the exercise was done
-     * 
+     *
      * @throws IllegalArgumentException
      *             if the duration is <= 0 or > 1440 minutes
      */
@@ -50,6 +51,7 @@ public class Session {
 
         this.exercise = exercise;
         this.durationMin = durationMin;
+        this.weightKg = weightKg;
         this.time = time;
 
         caloriesBurned = (exercise.getMETValue() * 3.5 * weightKg / 200)
@@ -60,14 +62,14 @@ public class Session {
     /**
      * Constructs a Session object. Calculates caloriesBurned from given values.
      * defaults time to Instant.now()
-     * 
+     *
      * @param exercise
      *            The type of exercise
      * @param durationMin
      *            the duration the exercise was done for
      * @param weightKg
      *            the weight of the individual during the activity
-     * 
+     *
      * @throws IllegalArgumentException
      *             if the duration is <= 0 or > 1440 minutes
      */
@@ -79,7 +81,7 @@ public class Session {
 
     /**
      * Returns the exercise name
-     * 
+     *
      * @return The exercise done
      */
     public Exercise getExercise() {
@@ -89,7 +91,7 @@ public class Session {
 
     /**
      * Returns the duration of the session in minutes
-     * 
+     *
      * @return the duration of exercise
      */
     public int getDuration() {
@@ -98,8 +100,18 @@ public class Session {
 
 
     /**
+     * Returns the body weight recorded for this session
+     *
+     * @return the weight, in kilograms, used to compute caloriesBurned
+     */
+    public double getWeightKg() {
+        return weightKg;
+    }
+
+
+    /**
      * Returns the time the exercise was completed
-     * 
+     *
      * @return the time in ISO-8601 format, UTC
      */
     public Instant getDate() {
@@ -109,7 +121,7 @@ public class Session {
 
     /**
      * Returns the calculated number of calories burned during the session
-     * 
+     *
      * @return theoretical calories burned
      */
     public double getCaloriesBurned() {

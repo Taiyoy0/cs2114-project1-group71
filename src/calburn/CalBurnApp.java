@@ -7,8 +7,7 @@ package calburn;
  * @author mlkuhl
  * @version Sep 17, 2026
  */
-public class CalBurnApp
-{
+public class CalBurnApp {
     private ExerciseList exerciseList;
 
     // ----------------------------------------------------------
@@ -20,8 +19,7 @@ public class CalBurnApp
      */
     // private User currentUser;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         int x = 0;
         System.out.println(x);
     }

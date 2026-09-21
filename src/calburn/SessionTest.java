@@ -85,6 +85,14 @@ public class SessionTest extends student.TestCase {
 
 
     /**
+     * Tests getWeightKg method
+     */
+    public void testGetWeightKg() {
+        assertEquals(60, session1.getWeightKg(), 0.1);
+    }
+
+
+    /**
      * Tests getDate method
      */
     public void testGetDate() {

@@ -1,5 +1,7 @@
 package calburn;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 
 // -------------------------------------------------------------------------
@@ -167,5 +169,95 @@ public class SessionLogTest extends student.TestCase {
         boundaryLog.addSession(lastOfAugust);
 
         assertEquals(175.0, boundaryLog.getMonthlyTotal(2026, 9), 0.001);
+    }
+
+
+    /**
+     * Tests that saving a SessionLog and loading it back into a fresh
+     * SessionLog reproduces the same sessions (round-trip test)
+     */
+    public void testSaveAndLoadSessionLogRoundTrip() throws IOException {
+        SessionLog toSave = new SessionLog();
+        toSave.addSession(new Session(running, 30, 70, Instant.parse(
+            "2026-09-19T09:00:00Z")));
+        toSave.addSession(new Session(running, 45, 70, Instant.parse(
+            "2026-09-20T09:00:00Z")));
+
+        File temp = File.createTempFile("sessionlog", ".txt");
+        temp.deleteOnExit();
+
+        toSave.saveSessionLog(temp.getAbsolutePath());
+
+        SessionLog loaded = new SessionLog();
+        loaded.loadSessionLog(temp.getAbsolutePath());
+
+        assertEquals(2, loaded.size());
+        assertEquals(toSave.getTotal(), loaded.getTotal(), 0.001);
+
+        temp.delete();
+    }
+
+
+    /**
+     * Tests that loading from a missing file throws IOException and
+     * leaves the log's existing contents completely unchanged
+     */
+    public void testLoadSessionLogMissingFile() {
+        int sizeBefore = log.size();
+
+        Exception exception = null;
+        try {
+            log.loadSessionLog("/no/such/path/does-not-exist.txt");
+        }
+        catch (IOException e) {
+            exception = e;
+        }
+
+        assertNotNull(exception);
+        assertEquals(sizeBefore, log.size());
+    }
+
+
+    /**
+     * Tests that loading a corrupt file throws IOException and leaves the
+     * log's existing contents completely unchanged
+     */
+    public void testLoadSessionLogCorruptFile() throws IOException {
+        int sizeBefore = log.size();
+
+        File temp = File.createTempFile("corrupt", ".txt");
+        temp.deleteOnExit();
+        java.nio.file.Files.write(temp.toPath(),
+            "this,is,not,a,valid,session,line\n".getBytes());
+
+        Exception exception = null;
+        try {
+            log.loadSessionLog(temp.getAbsolutePath());
+        }
+        catch (IOException e) {
+            exception = e;
+        }
+
+        assertNotNull(exception);
+        assertEquals(sizeBefore, log.size());
+
+        temp.delete();
+    }
+
+
+    /**
+     * Tests that saving to an invalid path (a directory that doesn't
+     * exist) throws IOException
+     */
+    public void testSaveSessionLogInvalidPath() {
+        Exception exception = null;
+        try {
+            log.saveSessionLog("/no/such/directory/out.txt");
+        }
+        catch (IOException e) {
+            exception = e;
+        }
+
+        assertNotNull(exception);
     }
 }

@@ -1,5 +1,10 @@
 package calburn;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
@@ -145,5 +150,94 @@ public class SessionLog {
         Instant end = ym.atEndOfMonth().plusDays(1).atStartOfDay(ZoneOffset.UTC)
             .toInstant();
         return getTotal(start, end);
+    }
+
+
+    /**
+     * Writes this log out to a text file, one session per line, in the
+     * format exerciseName,metValue,durationMin,weightKg,epochMilli
+     *
+     * @param path
+     *            the file to write to
+     *
+     * @throws IOException
+     *             if the file can't be created or written to
+     */
+    public void saveSessionLog(String path) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            for (Session s : sessions) {
+                writer.write(formatSessionLine(s));
+                writer.newLine();
+            }
+        }
+    }
+
+
+    /**
+     * Populates this log from a text file previously written by saveSessionLog.
+     * If any line is malformed, an IOException is thrown and the
+     * log's existing contents are left completely unchanged.
+     *
+     * @param path
+     *            the file to read from
+     *
+     * @throws IOException
+     *             if the file can't be read, or its contents are malformed
+     */
+    public void loadSessionLog(String path) throws IOException {
+        ArrayList<Session> loaded = new ArrayList<Session>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+                loaded.add(parseSessionLine(line));
+            }
+        }
+        catch (RuntimeException e) {
+            throw new IOException("Malformed session log file: " + path, e);
+        }
+
+        sessions = loaded;
+    }
+
+    // ~ Private Helper Methods ................................................
+
+
+    /**
+     * Formats a single Session as one CSV line for saveSessionLog.
+     */
+    private String formatSessionLine(Session s) {
+        Exercise ex = s.getExercise();
+        return ex.getName() + "," + ex.getMETValue() + "," + s.getDuration()
+            + "," + s.getWeightKg() + "," + s.getDate().toEpochMilli();
+    }
+
+
+    /**
+     * Parses one CSV line from loadSessionLog back into a Session.
+     *
+     * @throws RuntimeException
+     *             (NumberFormatException, IllegalArgumentException, etc.)
+     *             if the line is malformed; caught and wrapped by
+     *             loadSessionLog
+     */
+    private Session parseSessionLine(String line) {
+        String[] parts = line.split(",", -1);
+        if (parts.length != 5) {
+            throw new IllegalArgumentException("Expected 5 fields, found "
+                + parts.length + ": " + line);
+        }
+
+        String exerciseName = parts[0];
+        double metValue = Double.parseDouble(parts[1]);
+        int durationMin = Integer.parseInt(parts[2]);
+        double weightKg = Double.parseDouble(parts[3]);
+        Instant time = Instant.ofEpochMilli(Long.parseLong(parts[4]));
+
+        Exercise exercise = new Exercise(exerciseName, metValue);
+        return new Session(exercise, durationMin, weightKg, time);
     }
 }
