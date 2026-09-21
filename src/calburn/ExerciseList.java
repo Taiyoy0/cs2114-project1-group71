@@ -1,5 +1,6 @@
 package calburn;
 
+import java.io.*;
 import java.util.HashMap;
 
 // -------------------------------------------------------------------------
@@ -11,7 +12,7 @@ import java.util.HashMap;
  */
 public class ExerciseList
 {
-    private HashMap<String, Exercise> exercises;
+    private HashMap<String, Exercise> exercises = new HashMap<>();
 
     // ----------------------------------------------------------
     /**
@@ -24,7 +25,7 @@ public class ExerciseList
      */
     public Exercise getExercise(String name)
     {
-        return null;
+        return exercises.get(name);
     }
 
 
@@ -36,7 +37,7 @@ public class ExerciseList
      */
     public Exercise[] listExercises()
     {
-        return null;
+        return exercises.values().toArray(new Exercise[0]);
     }
 
 
@@ -50,6 +51,44 @@ public class ExerciseList
      */
     public void loadFromFile(String path)
     {
-        
+        try (BufferedReader reader = new BufferedReader(new FileReader(path)))
+        {
+            String line;
+            boolean firstLine = true;
+            while ((line = reader.readLine()) != null)
+            {
+                if (firstLine)
+                {
+                    firstLine = false;
+                    continue;
+                }
+                if (line.trim().isEmpty())
+                {
+                    continue;
+                }
+                String[] fields = line.split(",");
+                if (fields.length < 2)
+                {
+                    continue;
+                }
+                String name = fields[0].trim();
+                double metValue;
+                try
+                {
+                    metValue = Double.parseDouble(fields[1].trim());
+                }
+                catch (NumberFormatException n)
+                {
+                    continue;
+                }
+                exercises.put(name, new Exercise(name, metValue));
+            }
+        }
+        catch (IOException i)
+        {
+            throw new RuntimeException(
+                "Couldn't load exercises from " + path,
+                i);
+        }
     }
 }

@@ -9,7 +9,8 @@ import java.time.Instant;
  * @author taiyol
  * @version Sep 19, 2026
  */
-public class Session {
+public class Session
+{
     // ~ Fields ................................................................
     private Exercise exercise;
     private int durationMin;
@@ -30,7 +31,6 @@ public class Session {
      *            the weight of the individual during the activity
      * @param time
      *            the time the exercise was done
-     *
      * @throws IllegalArgumentException
      *             if the duration is <= 0 or > 1440 minutes
      */
@@ -39,12 +39,15 @@ public class Session {
         int durationMin,
         double weightKg,
         Instant time)
-        throws IllegalArgumentException {
-        if (durationMin <= 0) {
+        throws IllegalArgumentException
+    {
+        if (durationMin <= 0)
+        {
             throw new IllegalArgumentException(
                 "Duration cannot be equal to or less than 0 minutes");
         }
-        if (durationMin > 1440) {
+        if (durationMin > 1440)
+        {
             throw new IllegalArgumentException(
                 "Duration cannot be more than 24 hours (1440 minutes)");
         }
@@ -54,8 +57,8 @@ public class Session {
         this.weightKg = weightKg;
         this.time = time;
 
-        caloriesBurned = (exercise.getMETValue() * 3.5 * weightKg / 200)
-            * durationMin;
+        caloriesBurned =
+            (exercise.getMETValue() * 3.5 * weightKg / 200) * durationMin;
     }
 
 
@@ -69,12 +72,12 @@ public class Session {
      *            the duration the exercise was done for
      * @param weightKg
      *            the weight of the individual during the activity
-     *
      * @throws IllegalArgumentException
      *             if the duration is <= 0 or > 1440 minutes
      */
     public Session(Exercise exercise, int durationMin, double weightKg)
-        throws IllegalArgumentException {
+        throws IllegalArgumentException
+    {
         this(exercise, durationMin, weightKg, Instant.now());
     }
 
@@ -84,7 +87,8 @@ public class Session {
      *
      * @return The exercise done
      */
-    public Exercise getExercise() {
+    public Exercise getExercise()
+    {
         return exercise;
     }
 
@@ -94,7 +98,8 @@ public class Session {
      *
      * @return the duration of exercise
      */
-    public int getDuration() {
+    public int getDuration()
+    {
         return durationMin;
     }
 
@@ -104,7 +109,8 @@ public class Session {
      *
      * @return the weight, in kilograms, used to compute caloriesBurned
      */
-    public double getWeightKg() {
+    public double getWeightKg()
+    {
         return weightKg;
     }
 
@@ -114,7 +120,8 @@ public class Session {
      *
      * @return the time in ISO-8601 format, UTC
      */
-    public Instant getDate() {
+    public Instant getDate()
+    {
         return time;
     }
 
@@ -124,7 +131,8 @@ public class Session {
      *
      * @return theoretical calories burned
      */
-    public double getCaloriesBurned() {
+    public double getCaloriesBurned()
+    {
         return caloriesBurned;
     }
 

@@ -18,7 +18,8 @@ import java.util.ArrayList;
  * @author taiyol
  * @version Sep 19, 2026
  */
-public class SessionLog {
+public class SessionLog
+{
     // ~ Fields ................................................................
     private ArrayList<Session> sessions;
 
@@ -27,7 +28,8 @@ public class SessionLog {
     /**
      * Constructs an empty SessionLog.
      */
-    public SessionLog() {
+    public SessionLog()
+    {
         sessions = new ArrayList<Session>();
     }
 
@@ -41,8 +43,10 @@ public class SessionLog {
      *            the session to add
      * @return false without adding if session is null, otherwise true
      */
-    public boolean addSession(Session session) {
-        if (session == null) {
+    public boolean addSession(Session session)
+    {
+        if (session == null)
+        {
             return false;
         }
         sessions.add(session);
@@ -55,7 +59,8 @@ public class SessionLog {
      *
      * @return the number of logged sessions
      */
-    public int size() {
+    public int size()
+    {
         return sessions.size();
     }
 
@@ -65,9 +70,11 @@ public class SessionLog {
      *
      * @return total calories burned across all sessions
      */
-    public double getTotal() {
+    public double getTotal()
+    {
         double total = 0;
-        for (Session s : sessions) {
+        for (Session s : sessions)
+        {
             total += s.getCaloriesBurned();
         }
         return total;
@@ -82,17 +89,21 @@ public class SessionLog {
      * @param end
      *            exclusive end of the range
      * @return total calories burned within the range; 0 if start or end is
-     *         null, or if start is not strictly before end
+     *             null, or if start is not strictly before end
      */
-    public double getTotal(Instant start, Instant end) {
-        if (start == null || end == null || !start.isBefore(end)) {
+    public double getTotal(Instant start, Instant end)
+    {
+        if (start == null || end == null || !start.isBefore(end))
+        {
             return 0;
         }
 
         double total = 0;
-        for (Session s : sessions) {
+        for (Session s : sessions)
+        {
             Instant time = s.getDate();
-            if (!time.isBefore(start) && time.isBefore(end)) {
+            if (!time.isBefore(start) && time.isBefore(end))
+            {
                 total += s.getCaloriesBurned();
             }
         }
@@ -107,7 +118,8 @@ public class SessionLog {
      *            any instant within the day of interest
      * @return total calories burned that day
      */
-    public double getDailyTotal(Instant day) {
+    public double getDailyTotal(Instant day)
+    {
         Instant start = day.truncatedTo(ChronoUnit.DAYS);
         Instant end = start.plus(1, ChronoUnit.DAYS);
         return getTotal(start, end);
@@ -121,7 +133,8 @@ public class SessionLog {
      *            the start of the week
      * @return total calories burned that week
      */
-    public double getWeeklyTotal(Instant weekStart) {
+    public double getWeeklyTotal(Instant weekStart)
+    {
         Instant start = weekStart.truncatedTo(ChronoUnit.DAYS);
         Instant end = start.plus(7, ChronoUnit.DAYS);
         return getTotal(start, end);
@@ -139,8 +152,10 @@ public class SessionLog {
      * @throws IllegalArgumentException
      *             if month is not between 1 and 12
      */
-    public double getMonthlyTotal(int year, int month) {
-        if (month < 1 || month > 12) {
+    public double getMonthlyTotal(int year, int month)
+    {
+        if (month < 1 || month > 12)
+        {
             throw new IllegalArgumentException(
                 "Month must be between 1 and 12");
         }
@@ -154,18 +169,21 @@ public class SessionLog {
 
 
     /**
-     * Writes this log out to a text file, one session per line, in the
-     * format exerciseName,metValue,durationMin,weightKg,epochMilli
+     * Writes this log out to a text file, one session per line, in the format
+     * exerciseName,metValue,durationMin,weightKg,epochMilli
      *
      * @param path
      *            the file to write to
-     *
      * @throws IOException
      *             if the file can't be created or written to
      */
-    public void saveSessionLog(String path) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (Session s : sessions) {
+    public void saveSessionLog(String path)
+        throws IOException
+    {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path)))
+        {
+            for (Session s : sessions)
+            {
                 writer.write(formatSessionLine(s));
                 writer.newLine();
             }
@@ -175,28 +193,33 @@ public class SessionLog {
 
     /**
      * Populates this log from a text file previously written by saveSessionLog.
-     * If any line is malformed, an IOException is thrown and the
-     * log's existing contents are left completely unchanged.
+     * If any line is malformed, an IOException is thrown and the log's existing
+     * contents are left completely unchanged.
      *
      * @param path
      *            the file to read from
-     *
      * @throws IOException
      *             if the file can't be read, or its contents are malformed
      */
-    public void loadSessionLog(String path) throws IOException {
+    public void loadSessionLog(String path)
+        throws IOException
+    {
         ArrayList<Session> loaded = new ArrayList<Session>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path)))
+        {
             String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) {
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.trim().isEmpty())
+                {
                     continue;
                 }
                 loaded.add(parseSessionLine(line));
             }
         }
-        catch (RuntimeException e) {
+        catch (RuntimeException e)
+        {
             throw new IOException("Malformed session log file: " + path, e);
         }
 
@@ -209,7 +232,8 @@ public class SessionLog {
     /**
      * Formats a single Session as one CSV line for saveSessionLog.
      */
-    private String formatSessionLine(Session s) {
+    private String formatSessionLine(Session s)
+    {
         Exercise ex = s.getExercise();
         return ex.getName() + "," + ex.getMETValue() + "," + s.getDuration()
             + "," + s.getWeightKg() + "," + s.getDate().toEpochMilli();
@@ -220,15 +244,16 @@ public class SessionLog {
      * Parses one CSV line from loadSessionLog back into a Session.
      *
      * @throws RuntimeException
-     *             (NumberFormatException, IllegalArgumentException, etc.)
-     *             if the line is malformed; caught and wrapped by
-     *             loadSessionLog
+     *             (NumberFormatException, IllegalArgumentException, etc.) if
+     *             the line is malformed; caught and wrapped by loadSessionLog
      */
-    private Session parseSessionLine(String line) {
+    private Session parseSessionLine(String line)
+    {
         String[] parts = line.split(",", -1);
-        if (parts.length != 5) {
-            throw new IllegalArgumentException("Expected 5 fields, found "
-                + parts.length + ": " + line);
+        if (parts.length != 5)
+        {
+            throw new IllegalArgumentException(
+                "Expected 5 fields, found " + parts.length + ": " + line);
         }
 
         String exerciseName = parts[0];

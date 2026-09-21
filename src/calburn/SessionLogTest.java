@@ -11,7 +11,9 @@ import java.time.Instant;
  * @author taiyol
  * @version Sep 19, 2026
  */
-public class SessionLogTest extends student.TestCase {
+public class SessionLogTest
+    extends student.TestCase
+{
 
     private Exercise running;
     private SessionLog log;
@@ -25,19 +27,35 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Set up for testing SessionLog class
      */
-    public void setUp() {
+    public void setUp()
+    {
         running = new Exercise("Running", 10.0);
 
-        s1 = new Session(running, 30, 100, Instant.parse(
-            "2026-09-15T10:00:00Z"));
-        s2 = new Session(running, 40, 100, Instant.parse(
-            "2026-09-19T09:00:00Z"));
-        s3 = new Session(running, 20, 100, Instant.parse(
-            "2026-09-19T20:00:00Z"));
-        s4 = new Session(running, 50, 100, Instant.parse(
-            "2026-09-20T08:00:00Z"));
-        s5 = new Session(running, 25, 100, Instant.parse(
-            "2026-08-31T23:59:59Z"));
+        s1 = new Session(
+            running,
+            30,
+            100,
+            Instant.parse("2026-09-15T10:00:00Z"));
+        s2 = new Session(
+            running,
+            40,
+            100,
+            Instant.parse("2026-09-19T09:00:00Z"));
+        s3 = new Session(
+            running,
+            20,
+            100,
+            Instant.parse("2026-09-19T20:00:00Z"));
+        s4 = new Session(
+            running,
+            50,
+            100,
+            Instant.parse("2026-09-20T08:00:00Z"));
+        s5 = new Session(
+            running,
+            25,
+            100,
+            Instant.parse("2026-08-31T23:59:59Z"));
 
         log = new SessionLog();
         log.addSession(s1);
@@ -51,7 +69,8 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests addSession method
      */
-    public void testAddSession() {
+    public void testAddSession()
+    {
         SessionLog fresh = new SessionLog();
         assertEquals(0, fresh.size());
 
@@ -68,7 +87,8 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests size method
      */
-    public void testSize() {
+    public void testSize()
+    {
         SessionLog fresh = new SessionLog();
         assertEquals(0, fresh.size());
 
@@ -80,7 +100,8 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests getTotal method
      */
-    public void testGetTotal() {
+    public void testGetTotal()
+    {
 
         SessionLog fresh = new SessionLog();
         assertEquals(0.0, fresh.getTotal(), 0.001);
@@ -106,7 +127,8 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests getDailyTotal method
      */
-    public void testGetDailyTotal() {
+    public void testGetDailyTotal()
+    {
         Instant day = Instant.parse("2026-09-19T05:00:00Z");
         assertEquals(1050.0, log.getDailyTotal(day), 0.001);
 
@@ -118,7 +140,8 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests getWeeklyTotal method
      */
-    public void testGetWeeklyTotal() {
+    public void testGetWeeklyTotal()
+    {
         Instant weekStart = Instant.parse("2026-09-14T00:00:00Z");
         assertEquals(2450.0, log.getWeeklyTotal(weekStart), 0.001);
 
@@ -130,25 +153,30 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests getMonthlyTotal method
      */
-    public void testGetMonthlyTotal() {
+    public void testGetMonthlyTotal()
+    {
         assertEquals(2450.0, log.getMonthlyTotal(2026, 9), 0.001);
 
         assertEquals(0.0, log.getMonthlyTotal(2025, 1), 0.001);
 
         Exception exception = null;
-        try {
+        try
+        {
             log.getMonthlyTotal(2026, 13);
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException e)
+        {
             exception = e;
         }
         assertNotNull(exception);
 
         exception = null;
-        try {
+        try
+        {
             log.getMonthlyTotal(2026, 0);
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException e)
+        {
             exception = e;
         }
         assertNotNull(exception);
@@ -158,12 +186,19 @@ public class SessionLogTest extends student.TestCase {
     /**
      * Tests boundary values for getMonthlyTotal
      */
-    public void testGetMonthlyTotalBoundary() {
+    public void testGetMonthlyTotalBoundary()
+    {
         SessionLog boundaryLog = new SessionLog();
-        Session firstOfSept = new Session(running, 10, 100, Instant.parse(
-            "2026-09-01T00:00:00Z"));
-        Session lastOfAugust = new Session(running, 10, 100, Instant.parse(
-            "2026-08-31T23:59:59Z"));
+        Session firstOfSept = new Session(
+            running,
+            10,
+            100,
+            Instant.parse("2026-09-01T00:00:00Z"));
+        Session lastOfAugust = new Session(
+            running,
+            10,
+            100,
+            Instant.parse("2026-08-31T23:59:59Z"));
 
         boundaryLog.addSession(firstOfSept);
         boundaryLog.addSession(lastOfAugust);
@@ -176,12 +211,22 @@ public class SessionLogTest extends student.TestCase {
      * Tests that saving a SessionLog and loading it back into a fresh
      * SessionLog reproduces the same sessions (round-trip test)
      */
-    public void testSaveAndLoadSessionLogRoundTrip() throws IOException {
+    public void testSaveAndLoadSessionLogRoundTrip()
+        throws IOException
+    {
         SessionLog toSave = new SessionLog();
-        toSave.addSession(new Session(running, 30, 70, Instant.parse(
-            "2026-09-19T09:00:00Z")));
-        toSave.addSession(new Session(running, 45, 70, Instant.parse(
-            "2026-09-20T09:00:00Z")));
+        toSave.addSession(
+            new Session(
+                running,
+                30,
+                70,
+                Instant.parse("2026-09-19T09:00:00Z")));
+        toSave.addSession(
+            new Session(
+                running,
+                45,
+                70,
+                Instant.parse("2026-09-20T09:00:00Z")));
 
         File temp = File.createTempFile("sessionlog", ".txt");
         temp.deleteOnExit();
@@ -199,17 +244,20 @@ public class SessionLogTest extends student.TestCase {
 
 
     /**
-     * Tests that loading from a missing file throws IOException and
-     * leaves the log's existing contents completely unchanged
+     * Tests that loading from a missing file throws IOException and leaves the
+     * log's existing contents completely unchanged
      */
-    public void testLoadSessionLogMissingFile() {
+    public void testLoadSessionLogMissingFile()
+    {
         int sizeBefore = log.size();
 
         Exception exception = null;
-        try {
+        try
+        {
             log.loadSessionLog("/no/such/path/does-not-exist.txt");
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             exception = e;
         }
 
@@ -219,22 +267,27 @@ public class SessionLogTest extends student.TestCase {
 
 
     /**
-     * Tests that loading a corrupt file throws IOException and leaves the
-     * log's existing contents completely unchanged
+     * Tests that loading a corrupt file throws IOException and leaves the log's
+     * existing contents completely unchanged
      */
-    public void testLoadSessionLogCorruptFile() throws IOException {
+    public void testLoadSessionLogCorruptFile()
+        throws IOException
+    {
         int sizeBefore = log.size();
 
         File temp = File.createTempFile("corrupt", ".txt");
         temp.deleteOnExit();
-        java.nio.file.Files.write(temp.toPath(),
+        java.nio.file.Files.write(
+            temp.toPath(),
             "this,is,not,a,valid,session,line\n".getBytes());
 
         Exception exception = null;
-        try {
+        try
+        {
             log.loadSessionLog(temp.getAbsolutePath());
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             exception = e;
         }
 
@@ -246,15 +299,18 @@ public class SessionLogTest extends student.TestCase {
 
 
     /**
-     * Tests that saving to an invalid path (a directory that doesn't
-     * exist) throws IOException
+     * Tests that saving to an invalid path (a directory that doesn't exist)
+     * throws IOException
      */
-    public void testSaveSessionLogInvalidPath() {
+    public void testSaveSessionLogInvalidPath()
+    {
         Exception exception = null;
-        try {
+        try
+        {
             log.saveSessionLog("/no/such/directory/out.txt");
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             exception = e;
         }
 

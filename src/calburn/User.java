@@ -9,7 +9,8 @@ import java.io.IOException;
  * @author taiyol
  * @version Sep 19, 2026
  */
-public class User {
+public class User
+{
     // ~ Fields ................................................................
     private static final double MIN_WEIGHT_KG = 0;
     private static final double MAX_WEIGHT_KG = 400;
@@ -22,18 +23,19 @@ public class User {
     // ~ Constructors ..........................................................
 
     /**
-     * Constructs a new User. Defaults weeklyGoal to 0 and starts with an
-     * empty SessionLog.
+     * Constructs a new User. Defaults weeklyGoal to 0 and starts with an empty
+     * SessionLog.
      *
      * @param id
      *            the user's identifier
      * @param weightKg
      *            the user's body weight in kilograms
-     *
      * @throws IllegalArgumentException
      *             if id is null/empty, or weightKg is <= 0 or > 400
      */
-    public User(String id, double weightKg) throws IllegalArgumentException {
+    public User(String id, double weightKg)
+        throws IllegalArgumentException
+    {
         setID(id);
         setWeight(weightKg);
         sessionLog = new SessionLog();
@@ -48,7 +50,8 @@ public class User {
      *
      * @return the user id
      */
-    public String getID() {
+    public String getID()
+    {
         return id;
     }
 
@@ -58,12 +61,14 @@ public class User {
      *
      * @param newID
      *            the new id
-     *
      * @throws IllegalArgumentException
      *             if newID is null or empty (after trimming whitespace)
      */
-    public void setID(String newID) throws IllegalArgumentException {
-        if (newID == null || newID.trim().isEmpty()) {
+    public void setID(String newID)
+        throws IllegalArgumentException
+    {
+        if (newID == null || newID.trim().isEmpty())
+        {
             throw new IllegalArgumentException("ID cannot be null or empty");
         }
         id = newID;
@@ -75,7 +80,8 @@ public class User {
      *
      * @return weight in kilograms
      */
-    public double getWeight() {
+    public double getWeight()
+    {
         return weightKg;
     }
 
@@ -85,12 +91,14 @@ public class User {
      *
      * @param newWeight
      *            the new weight in kilograms
-     *
      * @throws IllegalArgumentException
      *             if newWeight is <= 0 or > 400
      */
-    public void setWeight(double newWeight) throws IllegalArgumentException {
-        if (newWeight <= MIN_WEIGHT_KG || newWeight > MAX_WEIGHT_KG) {
+    public void setWeight(double newWeight)
+        throws IllegalArgumentException
+    {
+        if (newWeight <= MIN_WEIGHT_KG || newWeight > MAX_WEIGHT_KG)
+        {
             throw new IllegalArgumentException(
                 "Weight must be greater than 0 and at most " + MAX_WEIGHT_KG
                     + " kg");
@@ -104,7 +112,8 @@ public class User {
      *
      * @return the user's SessionLog
      */
-    public SessionLog getSessionLog() {
+    public SessionLog getSessionLog()
+    {
         return sessionLog;
     }
 
@@ -114,7 +123,8 @@ public class User {
      *
      * @return the weekly goal, in calories; 0 means no goal is set
      */
-    public double getWeeklyGoal() {
+    public double getWeeklyGoal()
+    {
         return weeklyGoal;
     }
 
@@ -124,12 +134,14 @@ public class User {
      *
      * @param newGoal
      *            the new weekly goal, in calories
-     *
      * @throws IllegalArgumentException
      *             if newGoal is negative
      */
-    public void setWeeklyGoal(double newGoal) throws IllegalArgumentException {
-        if (newGoal < 0) {
+    public void setWeeklyGoal(double newGoal)
+        throws IllegalArgumentException
+    {
+        if (newGoal < 0)
+        {
             throw new IllegalArgumentException(
                 "Weekly goal cannot be negative");
         }
@@ -138,17 +150,18 @@ public class User {
 
 
     /**
-     * Populates this user's SessionLog from a text file previously written
-     * by saveSessionLog. On failure, the existing sessionLog is left completely
+     * Populates this user's SessionLog from a text file previously written by
+     * saveSessionLog. On failure, the existing sessionLog is left completely
      * unchanged
      *
      * @param path
      *            the file to read from
-     *
      * @throws IOException
      *             if the file can't be read, or its contents are malformed
      */
-    public void loadSessionLog(String path) throws IOException {
+    public void loadSessionLog(String path)
+        throws IOException
+    {
         sessionLog.loadSessionLog(path);
     }
 
@@ -158,11 +171,12 @@ public class User {
      *
      * @param path
      *            the file to write to
-     *
      * @throws IOException
      *             if the file can't be created or written to
      */
-    public void saveSessionLog(String path) throws IOException {
+    public void saveSessionLog(String path)
+        throws IOException
+    {
         sessionLog.saveSessionLog(path);
     }
 }
