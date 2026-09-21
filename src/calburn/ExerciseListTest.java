@@ -27,6 +27,7 @@ public class ExerciseListTest
     public void testExerciseCount()
     {
         assertEquals(8, list.listExercises().length);
+        assertNotSame(0, list.listExercises().length);
     }
 
 
@@ -38,15 +39,10 @@ public class ExerciseListTest
     {
         Exercise ex = list.getExercise("Running");
         assertEquals(8.3, ex.getMETValue(), 0.0001);
+
+        assertEquals(null, list.getExercise("Underwater Basket Weaving")); // For
+                                                                           // non-existent
+                                                                           // exercises
     }
 
-
-    // ----------------------------------------------------------
-    /**
-     * Test that null is returned for exercises that don't exist.
-     */
-    public void testGetExerciseNull()
-    {
-        assertNull(list.getExercise("Sitting in bed"));
-    }
 }
